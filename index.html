@@ -1,0 +1,456 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Guess the Tees Promo</title>
+<style>
+label{padding-bottom:10px;font-size:12pt;clear:both}
+.radios input{display:inline}
+label span{font-size:9pt;display:block;padding-left:22px;padding-bottom:5px}
+a{text-decoration:none}
+a{position:absolute;width:150px;text-decoration:none;color:black}
+img, div{border:0;background: transparent;position:relative}
+div input{border:2px solid black;width:248px;font-size:25px}
+#belt{width:3549px;height:515px;position:absolute;overflow:hidden;left:-1183px;-webkit-transition:left .5s ease-in-out}
+#belt>div{width:1183px;height:515px;position:relative;float:left;top:0px;font-size:17px;background-repeat:no-repeat}
+#rules,#done{-webkit-transition:opacity .3s}
+.checkbox{background:url(imgs/checkbox.png);width:39px;height:43px;padding:0px;margin:0px;cursor:pointer}
+.checkbox:hover{background-position-y:-43px}
+.checkbox div{width:39px;height:43px}
+.checkbox div.checked{background-image:url(imgs/checkboxCheck.png)}
+</style>
+<script src="intelxdk.js"></script>
+<script src="cordova.js"></script>
+<script src=jquery.js></script>
+<script>
+var minW = 1520;
+
+$(function () {
+CheckSizeZoom();
+$('body').css('visibility', 'visible');
+});
+$(window).resize(CheckSizeZoom);
+
+function CheckSizeZoom() {
+if ($(window).width() < minW || true) {
+var zoomLev = $(window).width() / minW;
+
+if (typeof (document.body.style.zoom) != "undefined") {
+$(document.body).css('zoom', zoomLev);
+}
+else {
+// Mozilla doesn't support zoom, use -moz-transform to scale and compensate for lost width
+$('body').css({
+	"-moz-transform" : 'scale(" + zoomLev + ")',
+	width : $(window).width() / zoomLev + 10,
+	position : 'relative',
+	left : (($(window).width() - minW - 16) / 2) + "px",
+	top : "-19px"
+});
+}
+}
+else {
+$(document.body).css({
+	zoom : '',
+	position : '',
+	left: "",
+	top: "",
+	"-moz-transform" : "",
+	width : ''	
+});
+}
+}
+</script>
+</head>
+<body style="font-family: Trebuchet MS;margin:0px;padding:0px;background:rgb(1,113,187);">
+	<div style="width:1183px;height:136px;margin:auto;position:relative;background:url(imgs/top.png) no-repeat 5px 25px"></div>
+	<div style="width:100%;background-color:white;border-top:3px solid #EAA820;border-bottom:3px solid #EAA820">
+		<div style=width:1183px;height:515px;margin:auto;background-color:white;overflow:hidden;>
+			<div id=belt>
+				<div>
+					<img src=imgs/box2.png style=position:absolute;top:6px;left:0px;height:285px>
+					<span style=position:absolute;left:295px;top:0px>
+						<b>Device Name:</b><br>
+						<span id=device>~</span><br>
+						<br>
+						<b># of entries:</b><br>
+						<span id=numentries>0</span><br>
+						<br>
+						<b># of fails:</b><br>
+						<span id=numbadentries>0</span><br>
+						<br>
+						<b>Last Sync:</b><br>
+						<span id=lastSync>Never</span><br>
+						<br>
+						<b>Current Promo:</b><br>
+						<span id=promo>~</span><br>
+						<br>
+						<button onclick=sync()>Sync Now!</button><br>
+						<hr>
+						<button onclick=changePromo()>Change Promotion</button><br>
+						<hr>
+						<br>
+						
+					</span>
+					<span style=position:absolute;left:440px;top:0px;width:419px;height:254px;overflow:auto>
+						<table width=100%>
+							<tr><th>Promo</th><th>Name</th><th>Guess</th><th>Email</th></tr>
+							<tbody id=people></tbody>
+						</table>
+					</span>
+					
+					<a href=# onclick="nextSlide(1); return false" style="display:block;position:absolute;bottom:10px;right:10px;width:93px;height:42px;background-image:url(imgs/buttons.png);background-position:-424px 0px">&nbsp;</a>
+				</div>
+				<div style=background-image:url(slide1.jpg)>
+					<div style=position:absolute;text-align:center;color:#0071BD;top:230px;left:400px;width:480px;font-size:40px><span id=offer>~</span></div>
+					<div style=position:absolute;text-align:center;color:#0071BD;top:330px;left:400px;width:480px><img id=image style=max-height:180px></div>
+					<input autocomplete='off' name=Tees id=Tees style=position:absolute;left:906px;width:205px;top:302px;font-size:28pt;border-width:3pz type=number inputtype=number>
+					<a href=# onclick="nextSlide(2); return false" style="display:block;position:absolute;left:905px;top:388px;width:214px;height:91px"></a>
+				</div>
+				<div style=background-image:url(slide2.jpg)>
+					<input autocomplete='off' style=position:absolute;left:594px;top:143px; name=FName id=FName>
+					<input autocomplete='off' style=position:absolute;left:880px;top:143px; name=LName>
+					<input autocomplete='off' style=position:absolute;left:594px;top:235px; name=Email type=email>
+					<input autocomplete='off' style=position:absolute;left:880px;top:235px; name=Zip type=number inputtype=number>
+					<input autocomplete='off' style=position:absolute;left:594px;top:327px; name=Phone type=tel inputtype=number>
+					<div class=checkbox style=position:absolute;left:876px;top:322px><div id=disclaimer class=checked></div></div>
+					<div onclick="nextSlide(1); return false" style="display:block;position:absolute;left:686px;top:421px;width:164px;height:63px;">&nbsp;</div>
+					<a href=# onclick="nextSlide(3); return false" style="display:block;position:absolute;left:943px;top:413px;width:200px;height:86px;">&nbsp;</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="width:1183px;position:relative;margin:auto;height:91px">
+		<a href=# onclick="$('#rules').css('display','block').css('opacity',1); return false" style=text-align:right;position:absolute;left:900px;top:52px;background-image:url(imgs/ocr.png);height:16px;width:193px></a>
+	</div>
+
+
+
+<div style=position:absolute;top:0px;left:0px;width:100%;min-height:100%;background-color:rgba(0,0,0,.8);display:none id=rules ><div style=position:relative;display:block;top:10px;left:0px;margin:auto;background-color:white;width:1050px;min-height:705px;padding:10px;text-align:justify;font-size:12px>
+	<b>Details of this Contest</b>
+	<span id=details>~</span>
+	<img src=imgs/close.png style=position:absolute;top:5px;right:5px></div>
+</div>
+<div style=position:absolute;top:0px;left:0px;width:100%;height:100%;display:none id=done>
+	<div style="width:1183px;margin:auto;position:relative;height:136px;border-bottom:3px solid #EAA820;background:rgb(1,113,187) url(imgs/ty.png) no-repeat 5px 25px"></div>
+	<div style=width:1183px;height:515px;margin:auto;background-image:url(slide3.jpg)>
+		<div style=position:absolute;text-align:center;color:black;top:117px;left:156px;width:1010px;font-size:50px;font-weight:bold id="thankYouMessage">Thank you for participating! We will notify the winner via email.<br> We hope you guessed right!</div>
+	</div>
+</div>
+<div style=position:absolute;top:0px;left:0px;width:100%;height:100%;display:none id=availPromos>
+	<div style="width:1183px;margin:auto;position:relative;height:136px;border-bottom:3px solid #EAA820;background:rgb(1,113,187)"></div>
+	<div style=width:1183px;height:515px;background-color:white>
+		<table><tr><th></th><th>Club</th><th>Start</th><th>End</th><th>Offer</th></tr><tbody></tbody></table>
+			<a href=# onclick="$('#availPromos').css('display','none'); nextSlide(1); return false" style="display:block;position:absolute;bottom:10px;right:10px;width:93px;height:42px;background-image:url(imgs/buttons.png);background-position:-424px 0px">&nbsp;</a>
+				
+	</div>
+</div>
+		
+
+<script>
+var Device='tablet';
+
+	
+
+
+if(!('BadFName' in localStorage)){
+	localStorage['FName']='';
+	localStorage['LName']='';
+	localStorage['Email']='';
+	localStorage['Phone']='';
+	localStorage['Zip']='';
+	localStorage['Tees']='';
+	localStorage['Date']='';
+	localStorage['Disclaimer']='';
+	localStorage['BadFName']='';
+	localStorage['BadLName']='';
+	localStorage['BadEmail']='';
+	localStorage['BadPhone']='';
+	localStorage['BadZip']='';
+	localStorage['BadTees']='';
+	localStorage['BadDate']='';
+	localStorage['BadDisclaimer']='';
+	localStorage['BadStatus']='';
+	localStorage['LastSync']='Never';
+	localStorage['Promo']='';
+	localStorage['End']='';
+	localStorage['Offer']='';
+	localStorage['Details']='';
+	localStorage['Image']='';
+}
+
+
+var curslide=1;
+function nextSlide(slide){
+	var FName=$("[name='FName']").attr("value").replace(",",".").replace('|','');
+	var LName=$("[name='LName']").attr("value").replace(",",".").replace('|','');
+	var Email=$("[name='Email']").attr("value").replace(",",".").replace('|','');
+	var Zip  =$("[name='Zip']"  ).attr("value").replace(",",".").replace('|','');
+	var Tees =$("[name='Tees']" ).attr("value").replace(",",".").replace('|','');
+	var Phone =$("[name='Phone']" ).attr("value").replace(",",".").replace('|','');
+	var Disclaimer =$("#disclaimer.checked" ).length;
+	
+	if(slide==1){
+		setTimeout(function(){document.getElementById("Tees").focus();},600);
+	}
+	if(slide==2 && Tees=='00009129'){
+		$("#belt").css('left',0);
+		$("#belt>div:eq(1) input").val('');
+		curslide=slide;
+		var fnames=localStorage['FName'].split('|');
+		var lnames=localStorage['LName'].split('|');
+		var tees=localStorage['Tees'].split('|');
+		var emails=localStorage['Email'].split('|');
+		var badfnames=localStorage['BadFName'].split('|');
+		var numentries=fnames.length;
+		var numbadentries=badfnames.length;
+		$('#numentries').html((numentries==0)?0:numentries-1);
+		$('#numbadentries').html((numbadentries==0)?0:numbadentries-1);
+		$('#lastSync').html(localStorage['LastSync']);
+	
+		var temp='';
+		for(i=1;i<numentries;i++)
+			temp+='<tr><td>'+fnames[i]+' '+lnames[i]+'</td><td>'+tees[i]+'</td><td>'+emails[i]+'</td></tr>';
+		$('#people').html(temp);
+		curslide='admin';
+		return;
+	}
+	
+	if(slide==2 && Tees!=parseInt(Tees)){
+		notificationAlert("red","Please enter your tee guess")
+		return;
+	}
+	if(slide==2){
+		setTimeout(function(){document.getElementById("FName").focus();},600);
+	}
+	if(slide==3 && FName==""){
+		notificationAlert("red","Please check your first name")
+		return;
+	}
+	if(slide==3 && LName==""){
+		notificationAlert("red","Please check your last name")
+		return;
+	}
+	if(slide==3 && Zip==""){
+		notificationAlert("red","Please check your Zip Code")
+		return;
+	}
+	if(slide==3 && (Email=="" || Email.indexOf("@")<1 || Email.indexOf(".")<1)){
+		notificationAlert("red","Please check your email address")
+		return;
+	}
+	if(slide==3){
+		d=new Date();
+		myDate=Math.round(d.getTime()/1000);
+		localStorage['FName']+="|"+FName;
+		localStorage['LName']+="|"+LName;
+		localStorage['Email']+="|"+Email;
+		localStorage['Phone']+="|"+Phone;
+		localStorage['Zip']+="|"+Zip;
+		localStorage['Tees']+="|"+Tees;
+		localStorage['Date']+="|"+myDate;
+		localStorage['Disclaimer']+="|"+Disclaimer;
+		localStorage['Promo']+="|"+localStorage['Promo'];
+		$("#done").css('display','block').css('opacity',1);
+		setTimeout(function(){
+			onBackKeyDown();
+		},5000);
+		
+		if(navigator.connection.type!=Connection.NONE)sync();
+			cordova.plugins.Keyboard.close();
+		return false;
+	}
+		$("#belt").css('left',-1183*slide);
+		curslide=slide;
+	
+
+}
+
+function notificationAlert(color,msg){
+	navigator.notification.alert(msg,null,'Guess How Many Tees','Back');
+	return true;
+}
+
+var tempfname;
+var templname;
+var tempemail;
+var tempphone;
+var tempzip;
+var temptees;
+var tempdate;
+var tempdisclaimer;
+
+
+function sync(){
+	var fnames=localStorage['FName'].split('|');
+	var lnames=localStorage['LName'].split('|');
+	var emails=localStorage['Email'].split('|');
+	var phones=localStorage['Phone'].split('|');
+	var zips=localStorage['Zip'].split('|');
+	var tees=localStorage['Tees'].split('|');
+	var dates=localStorage['Date'].split('|');
+	var disclaimers=localStorage['Disclaimer'].split('|');
+	var badfnames=localStorage['BadFName'].split('|');
+	var promos=localStorage['Promo'];
+	
+	var d = new Date();
+	var lastsync=(d.getMonth()+1)+'/'+d.getDate()+'/'+d.getYear()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+	localStorage['LastSync']=lastsync;
+	$('#lastSync').html(lastsync);
+	
+	var numentries=fnames.length;
+	var numbadentries=badfnames.length;
+	$('#numentries').html((numentries==0)?0:numentries-1);
+	$('#numbadentries').html((numbadentries==0)?0:numbadentries-1);
+	var temp='';
+	for(i=1;i<numentries;i++)
+		temp+='<tr><td>'+promos[i]+'</td><td>'+fnames[i]+' '+lnames[i]+'</td><td>'+tees[i]+'</td><td>'+emails[i]+'</td></tr>';
+	$('#people').html(temp);
+	curslide='admin';
+	if(numentries>1){
+		tempfname=fnames.pop();
+		templname=lnames.pop();
+		tempemail=emails.pop();
+		tempphone=phones.pop();
+		tempzip=zips.pop();
+		temptees=tees.pop();
+		tempdate=dates.pop();
+		tempdisclaimer=disclaimers.pop();
+		temppromo=promos;
+		localStorage['FName']=fnames.join('|');
+		localStorage['LName']=lnames.join('|');
+		localStorage['Email']=emails.join('|');
+		localStorage['Phone']=phones.join('|');
+		localStorage['Zip']=zips.join('|');
+		localStorage['Tees']=tees.join('|');
+		localStorage['Date']=dates.join('|');
+		localStorage['Disclaimer']=disclaimers.join('|');
+		
+		$.post('http://howmanytees.com/submit.json.php',{'FName':tempfname,'LName':templname,'Email':tempemail,'Phone':tempphone,'Zip':tempzip,'Tees':temptees,'Promo':temppromo,'Date':tempdate,'Device':Device,'Disclaimer':tempdisclaimer},function(data){
+			if(data.status=="good")
+				sync();
+			else {
+				localStorage['BadFName']+="|"+tempfname;
+				localStorage['BadLName']+="|"+templname;
+				localStorage['BadEmail']+="|"+tempemail;
+				localStorage['BadPhone']+="|"+tempphone;
+				localStorage['BadZip']+="|"+tempzip;
+				localStorage['BadTees']+="|"+temptees;
+				localStorage['BadDate']+="|"+tempdate;
+				localStorage['BadDisclaimer']+="|"+tempdisclaimer;
+				localStorage['BadStatus']+="|"+data.status;
+				sync();
+			}
+		});
+	}
+}
+
+$("#rules, #done").css('opacity',0);
+$("#rules img").click(function(){
+	$(this).parent("div").parent("div").css('opacity',0)
+	setTimeout("$('#rules').css('display','none')",500);
+	return false
+});
+onload = function(){
+	document.getElementById("Tees").focus();
+	$('#lastSync').html(localStorage['LastSync']);
+	$('#promo').html(localStorage['Promo']);
+	$('#offer').html(localStorage['Offer']);
+	$('#details').html(localStorage['Details']);
+	$('#image').attr('src',localStorage['Image']);
+	if(localStorage['End']!='0000-00-00 00:00:00'){
+		var end=localStorage['End'].split(' ');
+		end=end[0].split('-');
+		$('#thankYouMessage').html('The winner will be notified by '+parseInt(end[1])+'/'+parseInt(end[2])+'/'+end[0]+'.<br> We hope you guessed right!')
+	}
+	else
+		$('#thankYouMessage').html('Thank you for participating! We<br> will notify the winner via email.<br> We hope you guessed right!');
+	if(localStorage['Promo']==''){
+		$("#Tees").val('00009129');
+		nextSlide(2);
+	}
+	document.addEventListener("deviceready", onDeviceReady, false);
+}
+ function onDeviceReady() {
+	document.addEventListener("backbutton", onBackKeyDown, false);
+	Device=device.model+':'+device.uuid;
+	$('#device').html(Device);
+}
+function onBackKeyDown() {
+	$("input").removeAttr("checked").not("[type='radio']").attr("value","");
+	$(".checkbox div").addClass('checked');
+	slide=curslide=1;
+	$("#belt").css('left',-1183);
+	$('#done').animate({opacity:0},500,function(){
+		$(this).css('display','none');
+	});
+	setTimeout(function(){document.getElementById("Tees").focus();},600);
+	
+	
+}
+
+ $('input').keydown( function(e) {
+	var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+	console.log(key);
+	if(key == 220) { // "|"
+		e.preventDefault();
+	}
+	if(key == 191) { // "/"
+		e.preventDefault();
+		this.value=this.value+'.';
+	}
+	if(key == 13) { // enter
+		e.preventDefault();
+		nextSlide(curslide+1);
+	}
+	if($(this).attr('inputtype')=='number'){
+		if(key!=9 && key!=8 && key!=48 && key!=49 && key!=50 && key!=51 && key!=52 && key!=53 && key!=54 && key!=55 && key!=56 && key!=57)
+		e.preventDefault();
+	}
+});
+$('a').keydown( function(e) {
+	var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+	if(key==9)
+		e.preventDefault();
+	$(this).trigger('click');
+});
+
+var promos;
+function changePromo(){
+	 $.getJSON('http://howmanytees.com/promos.json.php',function(data){
+		promos=data;
+		var temp='';
+		for(i in promos)
+			temp+='<tr><td><button onclick=applyPromo('+i+')>Apply</button></td><td>'+promos[i].Club+'</td><td>'+promos[i].Start+'</td><td>'+promos[i].End+'</td><td>'+promos[i].Offer+'</td></tr>';
+		$('#availPromos').css('display','block').find('tbody').eq(1).html(temp);
+	});
+}
+function applyPromo(what){
+	$('#availPromos').css('display','none');
+	localStorage['Promo']=promos[what].Promo;
+	localStorage['End']=promos[what].End;
+	localStorage['Offer']=promos[what].Offer;
+	localStorage['Details']=promos[what].Details;
+	localStorage['Image']=promos[what].Image;
+	$('#promo').html(localStorage['Promo']);
+	$('#offer').html(localStorage['Offer']);
+	$('#details').html(localStorage['Details']);
+	$('#image').attr('src',localStorage['Image']);
+	if(localStorage['End']!='0000-00-00 00:00:00'){
+		var end=localStorage['End'].split(' ');
+		end=end[0].split('-');
+		$('#thankYouMessage').html('The winner will be notified by '+parseInt(end[1])+'/'+parseInt(end[2])+'/'+end[0]+'.<br> We hope you guessed right!')
+	}
+	else
+		$('#thankYouMessage').html('Thank you for participating! We<br> will notify the winner via email.<br> We hope you guessed right!');
+	
+	
+	promos='';
+}
+
+$('.checkbox').click(function(){$(this).children().toggleClass('checked')});
+</script>
+</body>
+</html>

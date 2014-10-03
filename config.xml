@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns   = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+        id          = "com.howmanytees.app"
+        versionCode = "10" 
+        version     = "1.0.1" >
+
+    <!-- versionCode is optional and Android only -->
+
+    <name>How Many Tees</name>
+
+    <description>
+        How Many Tees entry app. 
+    </description>
+
+    <author href="http://howmanytees.com" email="info@howmanytees.com">
+        Nick Schild
+    </author>
+	
+	<gap:platform name="android" />
+	<gap:plugin name="org.apache.cordova.dialogs" version="0.2.6" />
+	<gap:plugin name="com.ionic.keyboard" version="1.0.2" />
+	<gap:plugin name="org.apache.cordova.device" version="0.2.8" />
+	<gap:plugin name="org.apache.cordova.network-information" version="0.2.7" />
+
+	
+	<preference name="orientation" value="landscape" />
+	<icon src="icon.128.png" width="128" height="128" />
+	<access origin="http://howmanytees.com" subdomains="true" />
+	
+	<feature name="http://api.phonegap.com/1.0/network"/>
+	<feature name="http://api.phonegap.com/1.0/device"/>
+</widget>
